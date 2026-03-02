@@ -1,1 +1,25 @@
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detector AI</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+    <script defer src="script.js"></script>
+    <style>
+        body { display: flex; flex-direction: column; align-items: center; background: #121212; color: white; font-family: sans-serif; }
+        canvas { position: absolute; }
+        .container { position: relative; margin-top: 20px; }
+        #btnSent { margin-top: 20px; padding: 10px 20px; font-size: 1.2rem; cursor: pointer; }
+        #btnSent:disabled { opacity: 0.5; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <h1>Detector de Emociones Real-Time</h1>
+    <div class="container">
+        <video id="video" width="720" height="560" autoplay muted></video>
+    </div>
+    <button id="btnSent" disabled>SENT (Enviar Datos)</button>
+    <div id="status">Cargando modelos...</div>
+</body>
+</html>
