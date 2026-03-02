@@ -5,9 +5,9 @@ let currentEmotions = {}; // Aquí guardaremos el último resultado
 
 // 1. Cargar los modelos desde tu carpeta local
 Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-    faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-    faceapi.nets.faceExpressionNet.loadFromUri('/models')
+    faceapi.nets.tinyFaceDetector.loadFromUri('models'),
+    faceapi.nets.faceLandmark68Net.loadFromUri('models'),
+    faceapi.nets.faceExpressionNet.loadFromUri('models')
 ]).then(startVideo);
 
 function startVideo() {
