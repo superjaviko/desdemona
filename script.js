@@ -1,6 +1,7 @@
 const video = document.getElementById('video');
 const btnSent = document.getElementById('btnSent');
 const statusDiv = document.getElementById('status');
+const operatorNameInput = document.getElementById('operatorName');
 let currentEmotions = {}; // Aquí guardaremos el último resultado
 
 // 1. Cargar los modelos desde tu carpeta local
@@ -67,17 +68,26 @@ video.addEventListener('play', () => {
 });
 // 3. El POST al servidor
 btnSent.addEventListener('click', async () => {
+    const nameValue = operatorNameInput.value.trim();
     statusDiv.innerText = "Enviando a Desdemona...";
     
     // Calculamos un valor representativo para el 'average emotions rate'
     // En este caso, tomaremos la emoción con el puntaje más alto.
     const sortedEmotions = Object.entries(currentEmotions).sort((a, b) => b[1] - a[1]);
     const dominantEmotionValue = sortedEmotions[0][1]; // El valor (0.0 a 1.0)
-    const dominantEmotionName = sortedEmotions[0][0];  // El nombre (ej: "happy")
 
+    // Validación: No permitir envío sin nombre
+    if (!nameValue) {
+        alert("Por favor, introduce el nombre del operario antes de enviar.");
+        operatorNameInput.style.borderColor = "red";
+        return;
+    }
+
+    statusDiv.innerText = "Enviando a Desdemona...";
+    
     const payload = {
         "operator": {
-            "name": `Operario - ${dominantEmotionName.toUpperCase()}`, // Nombre dinámico según emoción
+            "name": nameValue, // Nombre dinámico según emoción
             "features": {
                 "average emotions rate": parseFloat(dominantEmotionValue.toFixed(2)),
                 "Memory": 4.0,           // Valores por defecto o capturados de otros inputs
@@ -97,14 +107,14 @@ btnSent.addEventListener('click', async () => {
         });
 
         if (response.ok) {
-            const result = await response.json();
-            statusDiv.innerText = "¡Operario creado con éxito en Desdemona!";
-            console.log("Respuesta del servidor:", result);
+            statusDiv.innerText = `¡Operario "${nameValue}" creado con éxito!`;
+            operatorNameInput.value = ""; // Limpiar campo tras éxito
+            operatorNameInput.style.borderColor = "#ccc";
         } else {
-            statusDiv.innerText = `Error en el servidor: ${response.status}`;
+            statusDiv.innerText = `Error: ${response.status}. Revisa la URL o el servidor.`;
         }
     } catch (error) {
         statusDiv.innerText = "Error de conexión. Revisa la consola.";
-        console.error("Detalle del error:", error);
+        console.error(error);
     }
 });
