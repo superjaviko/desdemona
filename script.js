@@ -67,21 +67,44 @@ video.addEventListener('play', () => {
 });
 // 3. El POST al servidor
 btnSent.addEventListener('click', async () => {
-    statusDiv.innerText = "Enviando datos...";
+    statusDiv.innerText = "Enviando a Desdemona...";
     
+    // Calculamos un valor representativo para el 'average emotions rate'
+    // En este caso, tomaremos la emoción con el puntaje más alto.
+    const sortedEmotions = Object.entries(currentEmotions).sort((a, b) => b[1] - a[1]);
+    const dominantEmotionValue = sortedEmotions[0][1]; // El valor (0.0 a 1.0)
+    const dominantEmotionName = sortedEmotions[0][0];  // El nombre (ej: "happy")
+
+    const payload = {
+        "operator": {
+            "name": `Operario - ${dominantEmotionName.toUpperCase()}`, // Nombre dinámico según emoción
+            "features": {
+                "average emotions rate": parseFloat(dominantEmotionValue.toFixed(2)),
+                "Memory": 4.0,           // Valores por defecto o capturados de otros inputs
+                "Lev. Profes Train": 3.5,
+                "Manual Dex.": 4.0
+            }
+        }
+    };
+
     try {
-        const response = await fetch('https://tu-servidor.com/api/emotions', {
+        const response = await fetch('https://desdemona.onrender.com/api/operators', { // Ajustado a la ruta común de creación
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                timestamp: new Date().toISOString(),
-                data: currentEmotions
-            })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
         });
-        
-        if(response.ok) statusDiv.innerText = "¡Datos enviados con éxito!";
+
+        if (response.ok) {
+            const result = await response.json();
+            statusDiv.innerText = "¡Operario creado con éxito en Desdemona!";
+            console.log("Respuesta del servidor:", result);
+        } else {
+            statusDiv.innerText = `Error en el servidor: ${response.status}`;
+        }
     } catch (error) {
-        statusDiv.innerText = "Error al enviar. Revisa la consola.";
-        console.error(error);
+        statusDiv.innerText = "Error de conexión. Revisa la consola.";
+        console.error("Detalle del error:", error);
     }
 });
