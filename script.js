@@ -58,8 +58,7 @@ video.addEventListener('play', () => {
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
         // Lógica del botón corregida
-        if (detections && detections.length > 0) {
-            currentEmotions = detections[0].expressions;
+        if (detections.length > 0 && operatorNameInput.value.trim() !== "" ) {
             btnSent.disabled = false;
         } else {
             btnSent.disabled = true;
