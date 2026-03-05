@@ -88,7 +88,7 @@ btnSent.addEventListener('click', async () => {
     };
 
     try {
-        const response = await fetch('https://desdemona.onrender.com/api/operators', { // Ajustado a la ruta común de creación
+        const response = await fetch('https://desdemona.onrender.com/api/addOperator', { // Ajustado a la ruta común de creación
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
