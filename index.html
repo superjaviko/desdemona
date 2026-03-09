@@ -32,8 +32,9 @@
         <video id="video" width="720" height="560" autoplay muted></video>
     </div>
     <div style="margin-top: 20px;">
-    <input type="text" id="operatorName" placeholder="Nombre del Operario" 
-           style="padding: 10px; width: 250px; border-radius: 5px; border: 1px solid #ccc; font-size: 1rem;">
+        <label for="operatorSelect" style="color: white;">Seleccionar Operador:</label>
+        <select id="operatorSelect" style="padding: 10px; border-radius: 5px;">
+        </select>
     </div>
     <button id="btnSent" disabled>SENT TO SERVER</button>
     <div id="status">Loading models...</div>
