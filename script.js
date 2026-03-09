@@ -73,13 +73,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 currentEmotions = detections[0].expressions;
                 if (operatorSelect.value !== "") {
                     btnSent.disabled = false;
-                    statusDiv.innerText = "Listo para enviar.";
+                    statusDiv.innerText = "Ready to send.";
                 } else {
-                    statusDiv.innerText = "Selecciona un operador.";
+                    statusDiv.innerText = "Select and operator.";
                 }
             } else {
                 btnSent.disabled = true;
-                statusDiv.innerText = "Buscando rostro...";
+                statusDiv.innerText = "Looking for a face...";
             }
         }, 100);
     });
@@ -104,12 +104,12 @@ window.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                statusDiv.innerText = `✅ Enviado: ${score}`;
+                statusDiv.innerText = `✅ Sent: ${score}`;
             } else {
-                statusDiv.innerText = `❌ Error API: ${response.status}`;
+                statusDiv.innerText = `❌ API Error: ${response.status}`;
             }
         } catch (e) {
-            statusDiv.innerText = "❌ Error de conexión.";
+            statusDiv.innerText = "❌ Connection Error.";
         }
     });
 });
