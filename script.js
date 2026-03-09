@@ -66,54 +66,47 @@ video.addEventListener('play', () => {
     }, 100);
 });
 // 3. El POST al servidor
+const operatorSelect = document.getElementById('operatorSelect');
+
+// 1. Poblamos el select con los 30 operadores al cargar la página
+for (let i = 1; i <= 30; i++) {
+    let option = document.createElement('option');
+    option.value = `Operator ${i}`;
+    option.text = `Operator ${i}`;
+    operatorSelect.appendChild(option);
+}
+
 btnSent.addEventListener('click', async () => {
-    const nameValue = operatorNameInput.value.trim();
-    statusDiv.innerText = "Enviando a Desdemona...";
+    const selectedOperator = operatorSelect.value;
+    statusDiv.innerText = `Actualizando ${selectedOperator}...`;
     
-    // Calculamos un valor representativo para el 'average emotions rate'
-    // En este caso, tomaremos la emoción con el puntaje más alto.
+    // Obtenemos la emoción dominante (0.0 - 5.0 para escalar con tus otros datos)
     const sortedEmotions = Object.entries(currentEmotions).sort((a, b) => b[1] - a[1]);
-    const dominantEmotionValue = sortedEmotions[0][1]; // El valor (0.0 a 1.0)
+    // Escalamos el valor de 0.1-1.0 a un rango de 1-5 para que coincida con tu escala
+    const emotionScore = (sortedEmotions[0][1] * 5).toFixed(3);
 
-    // Validación: No permitir envío sin nombre
-    if (!nameValue) {
-        alert("Por favor, introduce el nombre del operario antes de enviar.");
-        operatorNameInput.style.borderColor = "red";
-        return;
-    }
-
-    statusDiv.innerText = "Enviando a Desdemona...";
-    
+    // Estructura para modifyOperatorFeature
     const payload = {
-        "operator": {
-            "name": nameValue, // Nombre dinámico según emoción
-            "features": {
-                "average emotions rate": parseFloat(dominantEmotionValue.toFixed(2)),
-                "Memory": 4.0,           // Valores por defecto o capturados de otros inputs
-                "Lev. Profes Train": 3.5,
-                "Manual Dex.": 4.0
-            }
-        }
+        "name": selectedOperator,
+        "feature": "ave. rate emotions",
+        "value": emotionScore
     };
 
     try {
-        const response = await fetch('https://desdemona.onrender.com/api/addOperator', { // Ajustado a la ruta común de creación
+        const response = await fetch('https://desdemona.onrender.com/api/modifyOperatorFeature', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
 
         if (response.ok) {
-            statusDiv.innerText = `¡Operario "${nameValue}" creado con éxito!`;
-            operatorNameInput.value = ""; // Limpiar campo tras éxito
-            operatorNameInput.style.borderColor = "#ccc";
+            statusDiv.innerText = `¡Feature actualizado para ${selectedOperator}!`;
         } else {
-            statusDiv.innerText = `Error: ${response.status}. Revisa la URL o el servidor.`;
+            const errorData = await response.json();
+            statusDiv.innerText = `Error: ${errorData.message || response.status}`;
         }
     } catch (error) {
-        statusDiv.innerText = "Error de conexión. Revisa la consola.";
+        statusDiv.innerText = "Error de conexión con la API.";
         console.error(error);
     }
 });
