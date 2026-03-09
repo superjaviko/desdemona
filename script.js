@@ -41,10 +41,10 @@ window.addEventListener('DOMContentLoaded', () => {
         navigator.mediaDevices.getUserMedia({ video: {} })
             .then(stream => {
                 video.srcObject = stream;
-                statusDiv.innerText = "Cámara lista. Esperando rostro...";
+                statusDiv.innerText = "Webcam ready. Waiting for a face...";
             })
             .catch(err => {
-                statusDiv.innerText = "Error: No se detecta cámara.";
+                statusDiv.innerText = "Error: camera not detected.";
                 console.error(err);
             });
     }
