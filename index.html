@@ -126,4 +126,39 @@
         }
 
         button#btnSent:disabled {
-            background: #4
+            background: #475569;
+            box-shadow: none;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #status {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-align: center;
+            font-weight: bold;
+            min-height: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Face Emotion Analytics</h1>
+
+    <div class="video-container" id="video-wrapper">
+        <video id="video" width="720" height="560" autoplay muted></video>
+        </div>
+
+    <div class="controls-panel">
+        <label for="operatorSelect">Monitorización de Operario</label>
+        <select id="operatorSelect">
+            <option value="">-- Seleccionar Operador --</option>
+            </select>
+        
+        <button id="btnSent" disabled>SEND BIOMETRIC DATA</button>
+        
+        <div id="status">Iniciando sistema...</div>
+    </div>
+
+</body>
+</html>
