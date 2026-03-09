@@ -90,4 +90,26 @@ window.addEventListener('DOMContentLoaded', () => {
         statusDiv.innerText = `Enviando datos de ${selectedOperator}...`;
         
         const sorted = Object.entries(currentEmotions).sort((a, b) => b[1] - a[1]);
-        const
+        const score = (sorted[0][1] * 5).toFixed(3);
+
+        try {
+            const response = await fetch('https://desdemona.onrender.com/api/modifyOperatorFeature', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    "name": selectedOperator,
+                    "feature": "ave. rate emotions",
+                    "value": score
+                })
+            });
+
+            if (response.ok) {
+                statusDiv.innerText = `✅ Enviado: ${score}`;
+            } else {
+                statusDiv.innerText = `❌ Error API: ${response.status}`;
+            }
+        } catch (e) {
+            statusDiv.innerText = "❌ Error de conexión.";
+        }
+    });
+});
