@@ -58,10 +58,16 @@ video.addEventListener('play', () => {
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
         // Lógica del botón corregida
-        if (detections.length > 0 && operatorNameInput.value.trim() !== "" ) {
+        const selectedOperator = operatorSelect.value; 
+
+        if (detections.length > 0 && selectedOperator !== "") {
             btnSent.disabled = false;
+            btnSent.style.opacity = "1"; // Para que se vea activo
+            btnSent.style.cursor = "pointer";
         } else {
             btnSent.disabled = true;
+            btnSent.style.opacity = "0.5";
+            btnSent.style.cursor = "not-allowed";
         }
     }, 100);
 });
