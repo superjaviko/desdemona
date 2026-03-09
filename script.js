@@ -1,7 +1,8 @@
 const video = document.getElementById('video');
+const operatorSelect = document.getElementById('operatorSelect');
 const btnSent = document.getElementById('btnSent');
 const statusDiv = document.getElementById('status');
-const operatorNameInput = document.getElementById('operatorName');
+const videoContainer = document.querySelector('.video-container'); // Cambiado para el nuevo CSS
 let currentEmotions = {}; // Aquí guardaremos el último resultado
 
 // 1. Cargar los modelos desde tu carpeta local
@@ -22,17 +23,31 @@ function startVideo() {
 
 // 2. Ciclo de detección actualizado
 video.addEventListener('play', () => {
-    // Creamos el canvas
     const canvas = faceapi.createCanvasFromMedia(video);
-    document.querySelector('.container').append(canvas);
+    // IMPORTANTE: Añadirlo al contenedor, no al body
+    videoContainer.append(canvas); 
 
-    // Función para ajustar dimensiones dinámicamente
-    const updateDimensions = () => {
-        // Usamos offsetWidth/Height para obtener el tamaño REAL en el navegador (CSS)
-        const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
-        faceapi.matchDimensions(canvas, displaySize);
-        return displaySize;
-    };
+    const displaySize = { width: video.width, height: video.height };
+    faceapi.matchDimensions(canvas, displaySize);
+
+    setInterval(async () => {
+        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+            .withFaceLandmarks()
+            .withFaceExpressions();
+
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        faceapi.draw.drawDetections(canvas, resizedDetections);
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+
+        // Lógica del botón SENT
+        if (detections.length > 0 && operatorSelect.value !== "") {
+            btnSent.disabled = false;
+        } else {
+            btnSent.disabled = true;
+        }
+    }, 100);
+});
 
     // Ajuste inicial
     let displaySize = updateDimensions();
