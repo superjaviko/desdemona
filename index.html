@@ -24,19 +24,120 @@
         left: 0;
         z-index: 10;        /* Lo pone al frente para ver el recuadro */
     }
-    </style>
+   :root {
+    --primary: #00d2ff;
+    --bg-dark: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --text: #f8fafc;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    color: var(--text);
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+}
+
+h1 {
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: var(--primary);
+    margin-top: 30px;
+    text-transform: uppercase;
+}
+
+/* Contenedor del Video */
+.video-container {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0, 210, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    margin: 20px;
+    background: #000;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Panel de Control (Glassmorphism) */
+.controls-panel {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 350px;
+}
+
+select, button {
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+select {
+    background: #334155;
+    color: white;
+    cursor: pointer;
+}
+
+button#btnSent {
+    background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+}
+
+button#btnSent:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
+}
+
+button#btnSent:disabled {
+    background: #475569;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#status {
+    font-size: 0.9rem;
+    color: var(--primary);
+    text-align: center;
+    margin-top: 10px;
+}
+    </style>    
 </head>
 <body>
-    <h1>DESDEMONA: AI DETECTOR EMOTIONS</h1>
-    <div class="container">
+    <h1>Face Emotion Analytics</h1>
+
+    <div class="video-container">
         <video id="video" width="720" height="560" autoplay muted></video>
-    </div>
-    <div style="margin-top: 20px;">
-        <label for="operatorSelect" style="color: white;">Seleccionar Operador:</label>
-        <select id="operatorSelect" style="padding: 10px; border-radius: 5px;">
+        </div>
+
+    <div class="controls-panel">
+        <label for="operatorSelect">Monitorización de Operario:</label>
+        <select id="operatorSelect">
+            <option value="">Seleccione un número...</option>
         </select>
+        
+        <button id="btnSent" disabled>SEND BIOMETRIC DATA</button>
+        
+        <div id="status">Esperando detección de rostro...</div>
     </div>
-    <button id="btnSent" disabled>SENT TO SERVER</button>
-    <div id="status">Loading models...</div>
 </body>
 </html>
